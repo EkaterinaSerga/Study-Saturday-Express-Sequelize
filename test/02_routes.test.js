@@ -6,7 +6,7 @@ const app = require('../app');
 const agent = request.agent(app);
 
 const db = require('../db/db');
-const Promise = require('bluebird');
+// const Promise = require('bluebird');
 const Student = require('../db/models/student');
 const Test = require('../db/models/test');
 
@@ -44,8 +44,8 @@ describe('Routes', () => {
           lastName: 'Brown',
           email: 'cb@cbdb.com',
         },
-      ].map(data => Student.create(data));
-      return Promise.all(creatingStudents).then(createdStudents => {
+      ].map((data) => Student.create(data));
+      return Promise.all(creatingStudents).then((createdStudents) => {
         pepper = createdStudents[0];
         peter = createdStudents[1];
         charlie = createdStudents[2];
@@ -58,7 +58,7 @@ describe('Routes', () => {
           .get('/students')
           .expect('Content-Type', /json/)
           .expect(200)
-          .expect(res => {
+          .expect((res) => {
             expect(res.body).to.be.an.instanceOf(Array);
             expect(res.body).to.have.length(3);
           });
@@ -70,7 +70,7 @@ describe('Routes', () => {
         return agent
           .get(`/students/${pepper.id}`)
           .expect(200)
-          .expect(res => {
+          .expect((res) => {
             if (typeof res.body === 'string') res.body = JSON.parse(res.body);
             expect(res.body.firstName).to.equal('Pepper');
           });
@@ -92,7 +92,7 @@ describe('Routes', () => {
           })
           .expect(201)
           .expect('Content-Type', /json/)
-          .expect(res => {
+          .expect((res) => {
             expect(res.body.firstName).to.equal('SQL');
           });
       });
@@ -105,7 +105,7 @@ describe('Routes', () => {
           .send({ firstName: 'Salty' })
           .expect(200)
           .expect('Content-Type', /json/)
-          .expect(res => {
+          .expect((res) => {
             expect(res.body.firstName).to.equal('Salty');
           });
       });
@@ -117,7 +117,7 @@ describe('Routes', () => {
           .delete(`/students/${charlie.id}`)
           .expect(204)
           .expect(() => {
-            return Student.findById(charlie.id).then(res =>
+            return Student.findByPk(charlie.id).then((res) =>
               expect(res).to.equal(null)
             );
           });
@@ -148,8 +148,8 @@ describe('Routes', () => {
           subject: 'Outdoor Wilderness Survival',
           grade: 66,
         },
-      ].map(data => Test.create(data));
-      return Promise.all(creatingTests).then(createdTests => {
+      ].map((data) => Test.create(data));
+      return Promise.all(creatingTests).then((createdTests) => {
         funTest = createdTests[0];
         badTest = createdTests[1];
         hardTest = createdTests[2];
@@ -168,7 +168,7 @@ describe('Routes', () => {
         return agent
           .get('/tests')
           .expect(200)
-          .expect(res => {
+          .expect((res) => {
             expect(res.body).to.be.an.instanceOf(Array);
             expect(res.body).to.have.length(4);
           });
@@ -180,7 +180,7 @@ describe('Routes', () => {
         return agent
           .get(`/tests/${funTest.id}`)
           .expect(200)
-          .expect(res => {
+          .expect((res) => {
             expect(res.body.subject).to.equal(funTest.subject);
           });
       });
@@ -193,7 +193,7 @@ describe('Routes', () => {
           firstName: 'Pepper',
           lastName: 'Potts',
           email: 'saltn@pepper.com',
-        }).then(newStudent => {
+        }).then((newStudent) => {
           student = newStudent;
         });
       });
@@ -206,7 +206,7 @@ describe('Routes', () => {
           })
           .expect(201)
           .expect('Content-Type', /json/)
-          .expect(res => {
+          .expect((res) => {
             expect(res.body.studentId).to.equal(student.id);
           });
       });
@@ -217,7 +217,7 @@ describe('Routes', () => {
           .delete(`/tests/${crayTest.id}`)
           .expect(204)
           .expect(() => {
-            return Test.findById(crayTest.id).then(res => {
+            return Test.findByPk(crayTest.id).then((res) => {
               expect(res).to.equal(null);
             });
           });
